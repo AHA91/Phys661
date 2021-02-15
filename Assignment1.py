@@ -11,7 +11,7 @@ for i in range(len(v)):
     Mag_v+=v[i]**2
 Mag_v = np.sqrt(Mag_v)
 
-#print(Mag_v)
+print(Mag_v)
 
     
 #################### Part 2 Scalar Product #######################
