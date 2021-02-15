@@ -14,9 +14,9 @@ def ideal(_N_):
     t = [list(range(1,7)) for x in range(2)] #creates two dice
     g = list(map(sum,list(product(*t)))) #gives all possible combinations
     z = Counter(g) #counts the occurances of each combination
-    h = np.array(list(z.items())).astype(np.float) # convert the dict to an array
+    h = np.array(list(z.items())).astype(np.float) # convert the dict to an array of floats
     total = sum(h[:,1]) # gives the total probabilities
-    h[:,1] = h[:,1]/total*_N_ # where N is the number of times rolled the dice
+    h[:,1] = (h[:,1]/total)*_N_ # where N is the number of times rolled the dice
     return h
 
 
