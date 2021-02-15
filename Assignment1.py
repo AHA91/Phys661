@@ -41,7 +41,7 @@ for k in range(len(A)):
     result.append(sum_a)
     sum_a = 0
 
-#print(result)
+print(result)
 
 ###################### Part II ##################################
 # I take p = 4 where A = mxp and B = pxn
@@ -56,7 +56,7 @@ for g in range(len(_A_)):
         resultant[g][t] = total
         total = 0
 
-#print(resultant)
+print(resultant)
 
 
 
