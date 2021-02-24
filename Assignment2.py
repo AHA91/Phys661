@@ -1,6 +1,5 @@
 #### Meri Khurshudyan
 #### Assignment 2
-##### Up to date version of matplotlib is required 
 
 from itertools import product
 from collections import Counter
@@ -23,7 +22,7 @@ def ideal(_N_, k):
 def experimental1(_N_):
     rand1 = [random.randint(1,6) for x in range(_N_)]
     m = Counter(rand1)
-    h = np.array(m.items()).astype(np.float)
+    h = np.array(list(m.items())).astype(np.float)
     total = sum(h[:,1])
     h[:,1] = h[:,1]*(100/total)
     return h
@@ -38,8 +37,8 @@ def experimental(_N_):
 ###################### Biased Experimental Case 2 Dice ###################
 def biased(_N_):
     sides = [1,2,3,4,5,6]
-    rand1 = [random.choices(sides,(10,10,20,40,70,5)) for x in range(_N_)]
-    rand2 = [random.choices(sides,(10,10,10,80,40,30)) for x in range(_N_)]
+    rand1 = random.choices(sides,(10,10,20,40,70,5), k = _N_)
+    rand2 = random.choices(sides,(10,10,10,80,40,30), k = _N_)
     h = [rand1[i]+rand2[i] for i in range(_N_)]
     g = Counter(h)
     return g
@@ -51,7 +50,6 @@ N_ = 1000
 probab = [float((100/6))]*6
 range_ = range(1,7)
 d = experimental1(N_)
-
 plt.plot(range_, probab,"o", color = "red")
 plt.bar(d[:,0],d[:,1])
 plt.xlabel("Side")
@@ -64,7 +62,6 @@ plt.show()
 h = ideal(1000,7)
 x = h[:,0]
 y = h[:,1]
-
 b = experimental(1000)
 m = b.keys()
 n = b.values()
@@ -76,7 +73,7 @@ plt.title("Fair Dice")
 plt.show()
 '''
 ###################### Remove Quotes for Part II #########################
-
+'''
 h = ideal(1000,7)
 x = h[:,0]
 y = h[:,1]
@@ -90,4 +87,6 @@ plt.ylabel("Frequency")
 plt.xlabel("Sum For Rolls")
 plt.title("Unfair Dice")
 plt.show()
+'''
+
 
