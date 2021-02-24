@@ -23,7 +23,10 @@ def ideal(_N_, k):
 def experimental1(_N_):
     rand1 = [random.randint(1,6) for x in range(_N_)]
     m = Counter(rand1)
-    return m
+    h = np.array(m.items()).astype(np.float)
+    total = sum(h[:,1])
+    h[:,1] = h[:,1]*(100/total)
+    return h
 ####################### Experimental Case 2 Dice #########################
 def experimental(_N_): 
     rand1 = [random.randint(1,6) for x in range(_N_)]
@@ -34,23 +37,28 @@ def experimental(_N_):
 
 ###################### Biased Experimental Case 2 Dice ###################
 def biased(_N_):
-    rand1 = [int(random.triangular(1,6,5)) for x in range(_N_)]
-    rand2 = [int(random.triangular(1,6,6)) for x in range(_N_)]
+    sides = [1,2,3,4,5,6]
+    rand1 = [random.choices(sides,(10,10,20,40,70,5)) for x in range(_N_)]
+    rand2 = [random.choices(sides,(10,10,10,80,40,30)) for x in range(_N_)]
     h = [rand1[i]+rand2[i] for i in range(_N_)]
     g = Counter(h)
     return g
 
 ###########################  Graphs ######################################
 ######################## Remove Quotes for Single Dice ###################
+'''
 N_ = 1000
-probab = [float((N_/6))]*6
-print(probab)
+probab = [float((100/6))]*6
 range_ = range(1,7)
 d = experimental1(N_)
 
 plt.plot(range_, probab,"o", color = "red")
-plt.bar(d.keys(),d.values())
+plt.bar(d[:,0],d[:,1])
+plt.xlabel("Side")
+plt.ylabel("Outcome (%)")
+plt.title("Single Dice")
 plt.show()
+'''
 ####################### Remove Quotes for Part I #########################
 '''
 h = ideal(1000,7)
@@ -62,11 +70,13 @@ m = b.keys()
 n = b.values()
 plt.bar(m,n, color = 'pink')
 plt.plot(x,y,'o', color = 'purple')
+plt.ylabel("Frequency")
+plt.xlabel("Sum For Roll")
+plt.title("Fair Dice")
 plt.show()
 '''
-
 ###################### Remove Quotes for Part II #########################
-'''
+
 h = ideal(1000,7)
 x = h[:,0]
 y = h[:,1]
@@ -76,5 +86,8 @@ _x_ = _h_.keys()
 _y_ = _h_.values()
 plt.bar(_x_,_y_, color = 'red')
 plt.plot(x,y,'o', color = 'purple')
+plt.ylabel("Frequency")
+plt.xlabel("Sum For Rolls")
+plt.title("Unfair Dice")
 plt.show()
-'''
+
