@@ -7,7 +7,7 @@ import sympy as sp
 ###################### Part I with display option ########################
 def FPI(init = 1, ittr = 5, display = False):
      x = sp.symbols('x')
-     f = eval(input("Enter Fixed Point Function:"))
+     f = eval(input("Enter Fixed Point Function: x = "))
      n = f.subs(x,init).evalf()
      while ittr != 0:
           if display == True:
@@ -21,7 +21,7 @@ def FPI(init = 1, ittr = 5, display = False):
 ###################### Part II with display option #######################
 def NPM(init = 1, ittr = 5, display = False):
      x = sp.symbols('x')
-     f = eval(input("Enter A Function:"))
+     f = eval(input("Enter A Function: 0 = "))
      f_prime = sp.diff(f,x) 
      n = float(init)
      f_p = f_prime.subs(x,init).evalf()
@@ -40,7 +40,7 @@ def NPM(init = 1, ittr = 5, display = False):
 ##################### Part III with display options #######################
 def secant(x0, x1, ittr = 5, display = False):
      x = sp.symbols('x')
-     f = eval(input("Enter A Function:"))
+     f = eval(input("Enter A Function: 0 = "))
      while ittr != 0:
           if display == True:
                print("X0:  ", round(x0,3), "X1:  "\
