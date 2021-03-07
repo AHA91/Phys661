@@ -31,7 +31,7 @@ def NPM(init = 1, ittr = 5, display = False):
                print("X:".ljust(2), '{:.4f}'.format(n) , "|".ljust(2), "F(n): ",'{:.4f}'.format(f.subs(x,n).evalf()))
           n = n-f_x/f_p
           f_p = f_prime.subs(x,n).evalf()
-          f_x = f.subs(x,n).evalf()
+          f_x = float(f.subs(x,n).evalf())
           ittr = ittr - 1
      return format(n,".4f")
 
