@@ -11,10 +11,10 @@ def FPI(init = 1, ittr = 5, display = False):
      n = f.subs(x,init).evalf()
      while ittr != 0:
           if display == True:
-               print("X:  ", round(n,3), "F(X):  ", round(f.subs(x,n).evalf(), 3))
+               print("X:".ljust(2), '{:.4f}'.format(n),"|", "G(X):", '{:.4f}'.format(f.subs(x,n).evalf()))
           n = f.subs(x,n)
           ittr = ittr-1
-     return n
+     return format(n,".4f")
 
 
 
@@ -28,12 +28,12 @@ def NPM(init = 1, ittr = 5, display = False):
      f_x = f.subs(x,init).evalf()
      while ittr != 0:
           if display == True:
-               print("X:  ",round(n,3),"F(n):  ",round(f.subs(x,n).evalf(),3))
+               print("X:".ljust(2), '{:.4f}'.format(n) , "|".ljust(2), "F(n): ",'{:.4f}'.format(f.subs(x,n).evalf()))
           n = n-f_x/f_p
           f_p = f_prime.subs(x,n).evalf()
           f_x = f.subs(x,n).evalf()
           ittr = ittr - 1
-     return n
+     return format(n,".4f")
 
 
  
@@ -43,14 +43,14 @@ def secant(x0, x1, ittr = 5, display = False):
      f = eval(input("Enter A Function: 0 = "))
      while ittr != 0:
           if display == True:
-               print("X0:  ", round(x0,3), "X1:  "\
-                     ,round(x1,3), "F(X1):  ", round(f.subs(x,x1).evalf(),3))
+               print("X0:".ljust(2), '{:.4f}'.format(x0), "|", "X1:".ljust(2)\
+                     ,'{:.4f}.'.format(x1), "|","F(X1):".ljust(2), '{:.4f}'.format(f.subs(x,x1).evalf()))
           temp = x1
           x1 = x1 - (f.subs(x,x1).evalf()*(x1-x0)/\
                      (f.subs(x,x1).evalf()-f.subs(x,x0).evalf()))
           x0 = temp
           ittr = ittr - 1
-     return x1
+     return format(x1,".4f")
 
 ############################### Print Functions ############################
 
@@ -62,14 +62,6 @@ def secant(x0, x1, ittr = 5, display = False):
 
 #Part III
 #print("X1 = ", secant(1,2, display = True))
-          
-
-
-
-
-
-
-
 
 
 
