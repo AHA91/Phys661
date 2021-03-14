@@ -30,6 +30,9 @@ def NPM(init = 1, ittr = 5, display = False):
      f_p = f_prime.subs(x,init).evalf()
      f_x = f.subs(x,init).evalf()
      while ittr != 0:
+          if f_p == 0:
+              print("Divide by zero encountered")
+              break
           n = n-f_x/f_p
           f_p = f_prime.subs(x,n).evalf()
           f_x = float(f.subs(x,n).evalf())
@@ -47,6 +50,9 @@ def secant(x0, x1, ittr = 10, display = False):
      x = sp.symbols('x')
      f = eval(input("Enter A Function: 0 = "))
      while ittr != 0:
+          if (f.subs(x,x1).evalf()-f.subs(x,x0).evalf()) == 0:
+               print("Divide by zero encountered")
+               break
           temp = x1
           x1 = x1 - (f.subs(x,x1).evalf()*((x1-x0)/\
                      (f.subs(x,x1).evalf()-f.subs(x,x0).evalf())))
@@ -60,7 +66,7 @@ def secant(x0, x1, ittr = 10, display = False):
           
      return format(x1,".4f")
 
-############################### Print Functions ############################
+############################### Print Statements ############################
 
 #Part I
 #print("X = ", FPI(display = False))
