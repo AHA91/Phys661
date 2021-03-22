@@ -124,5 +124,7 @@ def Part33(num):
      mpm = Integral(0,10,num,"MPM", Input = False, f = f_x)
      mpmT = pd.DataFrame({"MPM":integralres})
      integralres.clear()
-     table1 = pd.concat([lsmT,rsmT,traT,mpmT], ignore_index = True, axis = 1)
-     return table1
+     table1 = np.array(pd.concat([lsmT,rsmT,traT,mpmT], ignore_index = True, axis = 1))
+     result = pd.DataFrame(table1, columns = ["LSM","RSM","Trapezoid","MPM"])
+     return result
+
