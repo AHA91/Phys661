@@ -27,7 +27,6 @@ def Differentiate(points, Type, h = 1, Input = True, f = 0):
           for i in points:
                y = (f(i+h)-f(i-h))/(2*h)
                result.append(y)
-
      return result
 
 ########################### Part III ##############################
@@ -50,13 +49,13 @@ def Part3():
      table[:,2] = abs(table[:,1] - f_p_x)
 
      table1 = pd.DataFrame(data = table, columns = ["Step Size","TPC","Error"])
-     print(table1)
      
      plt.plot(h, table[:,2], "o-", color = "Pink")
      plt.xlim(1*10**(-1),0)
      plt.xlabel("Step Size")
      plt.ylabel("Error")
      plt.show()
+     return table1
 
 ######################### Part I and II ###########################
 integralres = []
@@ -111,20 +110,19 @@ def Integral(low, up, num, Type, Input = True, f = 0):
 
 ######################### Part III #################################
 
-def Part33():
-     table = np.zeros((26,4))
+def Part33(num):
      f_x = lambda x: x**2
-     lsm = Integral(0,10,25,"LSM", Input = False, f = f_x)
-     table[:,0] = integralres
+     lsm = Integral(0,10,num,"LSM", Input = False, f = f_x)
+     lsmT = pd.DataFrame({"LSM":integralres})
      integralres.clear()
-     rsm = Integral(0,10,25,"RSM", Input = False, f = f_x)
-     table[:,1] = integralres
+     rsm = Integral(0,10,num,"RSM", Input = False, f = f_x)
+     rsmT = pd.DataFrame({"RSM":integralres})
      integralres.clear()
-     tra = Integral(0,10,25,"Trapezoid", Input = False, f = f_x)
-     table[:,2] = integralres
+     tra = Integral(0,10,num,"Trapezoid", Input = False, f = f_x)
+     traT = pd.DataFrame({"Trapezoid":integralres})
      integralres.clear()
-     mpm = Integral(0,10,25,"MPM", Input = False, f = f_x)
-     table[:,3] = integralres
+     mpm = Integral(0,10,num,"MPM", Input = False, f = f_x)
+     mpmT = pd.DataFrame({"MPM":integralres})
      integralres.clear()
-     table1 = pd.DataFrame(data = table, columns = ["LSM","RSM","Trapezoid","MPM"])
+     table1 = pd.concat([lsmT,rsmT,traT,mpmT], ignore_index = True, axis = 1)
      return table1
