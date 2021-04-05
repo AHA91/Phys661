@@ -31,79 +31,69 @@ def Differentiate(points, Type, h = 1, Input = True, f = 0):
 
 ########################### Part III ##############################
 def Part3():
-     f_x = lambda x: np.sin(x) - np.cos(x)
-     f_p_x = np.cos(0) + np.sin(0)
+     f_x = lambda x: np.exp(x)
+     f_p_x = 1
+     #table
+     table = pd.DataFrame(index = range(10), columns = ["H","TPF","Error"])
 
-     h = np.linspace(1*10**(-1),1*10**(-12),25)
-
-     table = np.zeros((len(h),3))
-     table[:,0] = h
-     z = []
-
-     for i in h:
-          n = Differentiate([0],"TPC", f = f_x, h = i, Input = False)
-          z.append(n)
-          
-     z = np.array(z)
-     table[:,1] = np.reshape(z,len(z))
-     table[:,2] = abs(table[:,1] - f_p_x)
-
-     table1 = pd.DataFrame(data = table, columns = ["Step Size","TPC","Error"])
+     table["H"] = [10**-10,10**-9,10**-8,10**-7,10**-6,10**-5,10**-4,10**-3,10**-2,10**-1]
+     table["TPF"] = Differentiate([0],"TPF", np.array(table["H"]), Input = False, f = f_x)[0]
+     table["Error"] = abs(np.array(table["TPF"])-1)
      
-     plt.plot(h, table[:,2], "o-", color = "Pink")
-     plt.xlim(1*10**(-1),0)
+     h = np.linspace(10**-14,10**-7,200)
+     j = np.linspace(10**-7,10**-1,200)
+
+     n = abs(np.array(Differentiate([0],"TPF", h , Input = False, f = f_x)[0]) - 1)
+     n3 =  abs(np.array(Differentiate([0],"TPF", j , Input = False, f = f_x)[0]) - 1)
+
+     plt.loglog(h ,n , "-", color = "brown")
+     plt.loglog(j,n3,"-", color = "brown")
+
      plt.xlabel("Step Size")
      plt.ylabel("Error")
      plt.show()
-     return table1
+     
+     return table
+  
 
 ######################### Part I and II ###########################
-integralres = []
-
+inte = []
 def Integral(low, up, num, Type, Input = True, f = 0):
+     x = (up-low)/num
      if Input == True:
           f = 'lambda x:' + input('Enter a function: ')
           f = eval(f)
           
      if Type == "LSM":
-          x = (up-low)/num
           integral = 0
-          integralres.append(integral)
-          while low <= up:
+          while low <= up-x:
                integral += (f(low)*x)
-               integralres.append(integral)
+               inte.append(integral)
                low += x
           
      if Type == "RSM":
-          x = (up-low)/num
           right = low+x
           integral = 0
-          integralres.append(integral)
           while right <= up:
                integral += (f(right)*x)
-               integralres.append(integral)
+               inte.append(integral)
                right += x
-          integralres.append(integral)   
+ 
 
      if Type == "Trapezoid":
-          x_del = (up-low)/num
-          integral = f(low)*(x_del/2)
-          integralres.append(integral)
-          while low <= up-x_del:
-               integral += 2*(f(low))*(x_del/2)
-               integralres.append(integral)
-               low += x_del
-          integral += f(up)*(x_del/2)
-          integralres.append(integral)
+          integral = 0
+          while low <= up-x:
+               integral += x*((f(low)+f(low+x))/2)
+               inte.append(integral)
+               low += x
+
      
      if Type == "MPM":
-          x = (up-low)/num
           mid = low+(x/2)
           integral = 0
-          integralres.append(integral)
           while mid <= up:
                integral += (f(mid)*x)
-               integralres.append(integral)
+               inte.append(integral)
                mid += x
 
      return integral  
@@ -111,20 +101,18 @@ def Integral(low, up, num, Type, Input = True, f = 0):
 ######################### Part III #################################
 
 def Part33(num):
-     f_x = lambda x: x**2
-     lsm = Integral(0,10,num,"LSM", Input = False, f = f_x)
-     lsmT = pd.DataFrame({"LSM":integralres})
-     integralres.clear()
-     rsm = Integral(0,10,num,"RSM", Input = False, f = f_x)
-     rsmT = pd.DataFrame({"RSM":integralres})
-     integralres.clear()
-     tra = Integral(0,10,num,"Trapezoid", Input = False, f = f_x)
-     traT = pd.DataFrame({"Trapezoid":integralres})
-     integralres.clear()
-     mpm = Integral(0,10,num,"MPM", Input = False, f = f_x)
-     mpmT = pd.DataFrame({"MPM":integralres})
-     integralres.clear()
-     table1 = np.array(pd.concat([lsmT,rsmT,traT,mpmT], ignore_index = True, axis = 1))
-     result = pd.DataFrame(table1, columns = ["LSM","RSM","Trapezoid","MPM"])
-     return result
-
+     f_x = lambda x: np.cos(x)
+     table = pd.DataFrame(index = range(num), columns = ["LSM","RSM","Trapezoid","MPM"])
+     Integral(0,1, num,"LSM",Input = False, f = f_x)
+     table["LSM"] = inte
+     inte.clear()
+     Integral(0,1, num,"RSM",Input = False, f = f_x)
+     table["RSM"] = inte
+     inte.clear()
+     Integral(0,1, num,"Trapezoid",Input = False, f = f_x)
+     table["Trapezoid"] = inte
+     inte.clear()
+     Integral(0,1, num,"MPM",Input = False, f = f_x)
+     table["MPM"] = inte
+     inte.clear()
+     return table
