@@ -69,8 +69,28 @@ def twoDUniform(M,section):
           ax.set_xlabel("Number of Steps")
           plt.legend()
           plt.show()
-                
           
+     if section == 3:
+          x1 = [np.cumsum(r.choices([-1,1],k=M)) for i in range(5)]
+          y1 = [np.cumsum(r.choices([-1,1],k=M)) for i in range(5)]
+                
+          x = []
+          y = []
+          for i in range(5):
+               theta = np.cumsum(r.choices([0,360],k=M))
+               print(theta)
+               x.append(5*np.cos(theta))
+               y.append(5*np.sin(theta))
+          fig = plt.figure(figsize=(10,10))
+          ax = fig.add_subplot(111, projection='3d')
+          for i in range(5):
+               ax.plot(range(M),x[i],y[i], label = "Polar " +str(i+1))
+               ax.plot(range(M), x1[i], y1[i], label = "Cartesian " + str(i+1))
+          ax.set_ylabel("x")
+          ax.set_zlabel("y")
+          ax.set_xlabel("Number of Steps")
+          plt.legend()
+          plt.show()
           
           
           
