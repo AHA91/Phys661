@@ -63,13 +63,14 @@ def twoDUniform(M,section):
           fig = plt.figure(figsize=(10,10))
           ax = fig.add_subplot(111, projection='3d')
           for i in range(5):
-               ax.plot(range(M),x[i],y[i])
-               ax.set_label(str(i))
+               ax.plot(range(M),x[i],y[i], label = str(i+1))
           ax.set_ylabel("x")
           ax.set_zlabel("y")
           ax.set_xlabel("Number of Steps")
           plt.legend()
           plt.show()
+                
+          
           
           
           
