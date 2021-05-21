@@ -2,10 +2,19 @@
 # Project1
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import truncnorm
+import sympy as sp
 import random as r
 import statistics as s
+import pandas as pd
+from mpl_toolkits.mplot3d import Axes3D
 
+def KramerKronig():
+     b = sp.Symbol("b")
+     df = np.array(pd.read_csv("extinctionSpectrum.txt",delimiter = "\t"))
+     n = [1+(2/np.pi)*sp.integrate((b*df[i,1])/((b**2)-df[i,0]**2),(b,0,i)) for i in range(0,1000,4)]
+     plt.plot(range(0,1000,4),n)
+     plt.show()
+     
 def OneDWalk(M, section):
      M = M+1
      if section == 1:
@@ -28,7 +37,18 @@ def OneDWalk(M, section):
      plt.title(t)
      plt.legend()
      plt.show()
-          
+
+def twoDUniform(M):
+     x = [np.cumsum(r.choices([-1,1],k=M)) for i in range(5)]
+     y = [np.cumsum(r.choices([-1,1],k=M)) for i in range(5)]
+     fig = plt.figure(figsize=(10,10))
+     ax = fig.add_subplot(111, projection='3d')
+     for i in range(5):
+          ax.plot(range(M),x[i],y[i])
+     ax.set_ylabel("x")
+     ax.set_zlabel("y")
+     ax.set_xlabel("Number of Steps")
+     plt.show()
           
           
           
