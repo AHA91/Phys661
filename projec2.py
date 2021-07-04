@@ -51,7 +51,7 @@ def airres(Vx0, Vy0, b0, beta):
      plt.legend()
      plt.show()
 
-def Gravity(x0,y0,vx0,vy0,m1,m2,G,t_,dt):
+def gravity(x0,y0,vx0,vy0,m1,m2,G,t_,dt):
     t = np.arange(0,t_,dt)
 
     x = np.zeros(len(t))
@@ -84,11 +84,12 @@ def Gravity(x0,y0,vx0,vy0,m1,m2,G,t_,dt):
     E = (1/2)*m1*(np.sqrt(vx**2+vy**2))**2-G*m1*m2/(np.sqrt(x**2+y**2))
     
     fig, (ax1, ax2, ax3) = plt.subplots(3)
-
-    ax1.plot(x,y)
-    ax1.set_title('Orbit')
-    ax1.set_xlabel('x')
-    ax1.set_ylabel('y')
+    camera = Camera(fig)
+    for i in range(len(x)):
+        ax1.plot(x,y, color = 'Blue')
+        ax1.plot(x[i],y[i],'o', color = "Green")
+        camera.snap()
+    animation = camera.animate()
 
     ax2.plot(t,L)
     ax2.set_xlabel('time')
@@ -97,8 +98,7 @@ def Gravity(x0,y0,vx0,vy0,m1,m2,G,t_,dt):
     ax3.plot(t,E)
     ax3.set_xlabel('time')
     ax3.set_ylabel('Total Energy')
-
-
+    
     plt.show()
                
      
@@ -175,8 +175,8 @@ def singleOscillator(k, v0, x0, m, dt, t, part):
           base = plt.gca().transData
           rot = tr.Affine2D().rotate_deg(90)
           for i in range(len(t)):
-               plt.plot(-3,x[i],"o", markersize = 15, color = "teal",transform= rot + base)
-               plt.plot(3,x_[i],"o", markersize = 15, color = "red",transform= rot + base)
+               plt.plot(-3,x[i],"o", markersize = 10, color = "teal",transform= rot + base)
+               plt.plot(3,x_[i],"o", markersize = 10, color = "red",transform= rot + base)
                plt.vlines([-3]*len(x),[nm]*len(x),x[i],transform= rot + base)
                plt.vlines([3]*len(x_),[nm]*len(x_),x_[i],transform= rot + base)
                camera.snap()

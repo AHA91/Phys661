@@ -7,6 +7,8 @@ import random as r
 import statistics as s
 import pandas as pd
 from mpl_toolkits.mplot3d import Axes3D
+from celluloid import Camera
+
 
 
 def KramerKronig():
@@ -119,7 +121,7 @@ def OneDWalk(M, H, section):
      #plt.plot(range(1,M,H),range(1,M,H), label = "Theoretical <x>^2")
      #plt.plot(range(1,M,H),[0]*(int(M/H)-1),label = "Theoretical <x>")
      plt.plot(range(1,M,H),x_ave,label = "Experimental <x>")
-     plt.plot(range(1,M,H),fin, label = "Experimental <x>^2")
+     plt.plot(range(1,M,H),x2_ave, label = "Experimental <x>^2")
      plt.title(t)
      plt.legend()
      plt.show()
@@ -214,46 +216,96 @@ def twoDUniform(M,section):
           plt.show()
 
 
-def brownian(Time,dt,k_,dx,section):
-     dt = dt/k_
-     M = int(Time/dt)
-
-     
+def brownian(Time,dt,k,section):
      if section == 1:
-          x_ave = [s.mean([sum(r.choices([-dx/np.sqrt(2),dx/np.sqrt(2)],k=N)) for i in range(int(np.sqrt(N)))]) for N in range(1,M,1)]
-          x2_ave = M*np.array([np.average(np.square([sum(r.choices([-1/np.sqrt(2),1/np.sqrt(2)],k=N)) for i in range(int(np.sqrt(N)))])) for N in range(1,M,1)])     
-          plt.plot(range(len(x_ave)),x_ave)
-          #plt.plot(range(len(x2_ave)),x2_ave)
-          plt.title("Uniform")
-          plt.plot(range(M),range(M),"o", color = "red", markersize = 3)
+          x2_ave = np.array([(Time*k_/dt)*s.mean([((1/np.sqrt(2))*(sum(r.choices([-1,1],k=int(Time*k_/dt)))))**2 \
+                                                  for i in range(int(np.sqrt(Time*k_/dt)))]) for k_ in np.linspace(1,k,100)])     
+          #It is proportional to n**2
+          o = np.array([(Time*k_/dt)**2 for k_ in np.linspace(1,k,100)])
+     
+          plt.plot(o,x2_ave)
+          plt.xlabel("N = T*k/dt")
+          plt.ylabel("N * <x^2>")
+          plt.title("Binary")
+          plt.plot(o,o, label = "Theoretical")
           plt.show()
           
      if section == 2:
-          x_ave = [s.mean([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))]) for N in range(1,M,1)]
-          x2_ave = M*np.array([np.average(np.square([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))])) for N in range(1,M,1)])
-          #plt.plot(range(len(x_ave)),x_ave)
-          plt.plot(range(len(x2_ave)),x2_ave)
-          plt.title("Normal")
-          plt.plot(range(M),range(M),"o", color = "red", markersize = 3)
-          plt.show()
-
-     if section == 3:
-          x_ave = [s.mean([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))]) for N in range(1,M,1)]
-          x2_ave = M*np.array([np.average(np.square([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))])) for N in range(1,M,1)])
-          y_ave = [s.mean([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))]) for N in range(1,M,1)]
-          y2_ave = M*np.array([np.average(np.square([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))])) for N in range(1,M,1)])
-          z_ave = [s.mean([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))]) for N in range(1,M,1)]
-          z2_ave = M*np.array([np.average(np.square([sum(np.random.normal(size=N)) for i in range(int(np.sqrt(N)))])) for N in range(1,M,1)])
-          
+          x2_ave = np.array([(Time*k_/dt)*s.mean([((sum(np.random.normal(size=int(Time*k_/dt)))))**2 \
+                                                  for i in range(int(np.sqrt(Time*k_/dt)))]) for k_ in np.linspace(1,k,100)])     
+          #It is proportional to n**2
+          o = np.array([(Time*k_/dt) for k_ in np.linspace(1,k,100)])
      
-          fig = plt.figure()
-          ax = fig.add_subplot(111, projection = '3d')
-          ax.plot(x2_ave,y2_ave,z2_ave,color = "green")
-          ax.plot(range(int(max(x2_ave))),range(int(max(x2_ave))),range(int(max(x2_ave))), color = "red")
-          ax.set_xlabel("x")
-          ax.set_ylabel("y")
-          ax.set_zlabel("z")
+          plt.plot(o,x2_ave)
+          plt.xlabel("N = T*k/dt")
+          plt.ylabel("N * <x^2>")
+          plt.title("Binary")
+          plt.plot(o,o, label = "Theoretical")
           plt.show()
+          
+     if section == 3:
+          al = []
+          r2_ave = []
+          N_ = int(Time*k/dt)
+          for k_ in np.linspace(1,k,10):# number of points 
+               N = int(Time*k_/dt)
+               gg = np.zeros((N,3),dtype = float)
+               for h in range(int(np.sqrt(N))):# number of trails
+                    for i in range(1,N): #number of steps
+                         ran = r.choices([1,2,3])
+                         if ran == [1]:
+                              x_ = np.random.normal(size = 1)
+                              gg[i,0] = x_
+                         if ran == [2]:
+                              y_ = np.random.normal(size = 1)
+                              gg[i,1] = y_
+                         if ran == [3]:
+                              z_ = np.random.normal(size = 1)
+                              gg[i,2] = z_
+                    r_ = sum(np.sqrt(gg[:,0]**2 + gg[:,1]**2 + gg[:,2]**2))
+                    al.append(r_)
+                    gg = np.zeros((N,3),dtype = float)
+               al = np.square(np.array(al))
+               b = N*s.mean(al)
+               r2_ave.append(b)
+               al = [] 
+          plt.plot(np.linspace(0,N,len(r2_ave)),r2_ave)
+          plt.ylabel("N*<r^2>")
+          plt.xlabel("N")
+          plt.show()
+          
+     if section == 4:
+          gg = np.zeros((100,3),dtype = float)
+          al = []
+          for j in range(50):
+               for i in range(100):
+                    ran = r.choices([1,2,3])
+                    if ran == [1]:
+                         x_ = r.choices([-1/np.sqrt(2),1/np.sqrt(2)])
+                         gg[i,0] = x_[0]
+                    if ran == [2]:
+                         y_ = r.choices([-1/np.sqrt(2),1/np.sqrt(2)])
+                         gg[i,1] = y_[0]
+                    if ran == [3]:
+                         z_ = r.choices([-1/np.sqrt(2),1/np.sqrt(2)])
+                         gg[i,2] = z_[0]
+               a = np.cumsum(gg,axis = 0)
+               al.append(a)
+               gg = np.zeros((100,3),dtype = float)
+          fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+          camera = Camera(fig)
+          
+          for i in range(len(a[:,0])):
+               for j in range(len(al)):
+                    an = al[j]
+                    ax.plot(an[i,0],an[i,1],an[i,2],"o")
+               camera.snap()
+          anim = camera.animate()
+          plt.show()
+          
+
+                    
+          
      
      
           
